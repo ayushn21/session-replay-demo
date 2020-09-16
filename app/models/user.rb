@@ -10,7 +10,25 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   
-  validates :password, presence: true
+  validates :password, presence: true, allow_nil: true
+  
+  def log_in
+    session_token = SecureRandom.urlsafe_base64
+    update(session_digest: BCrypt::Password.create(session_token))
+
+    return session_token
+  end
+  
+  def log_out
+    update(session_digest: nil)
+  end
+  
+  def authenticated?(token)
+    return false if session_digest.nil?
+
+    BCrypt::Password.new(session_digest).is_password?(token)
+  end
+  
   
   private
     def downcase_email
