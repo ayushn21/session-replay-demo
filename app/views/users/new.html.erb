@@ -1,0 +1,35 @@
+<h1>Sign up</h1>
+<br>
+
+<%= form_with(model: @user, 
+              url: signup_path, 
+              method: :post) do |f| %>
+
+  <% unless f.object.errors.empty? %>
+  <ul>
+    <h5>Errors</h5>
+    <% f.object.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+  <% end %>  
+      
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br>
+  
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+  <br>
+  
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+  <br>
+
+  <%= f.label :password_confirmation, "Confirmation" %>
+  <%= f.password_field :password_confirmation %>
+  <br>
+  
+  <br><br>
+<%= f.submit "Create my account" %>
+<% end %>
