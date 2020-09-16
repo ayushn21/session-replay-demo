@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       reset_session
       session[:user_id] = user.id
+      session[:token] = user.log_in
       redirect_to home_path
     else
       flash[:error] = "Invalid email/password combination"
@@ -16,8 +17,10 @@ class SessionsController < ApplicationController
   end
   
   def destroy
+    current_user&.log_out
+  
     reset_session
-    
+      
     flash[:info] = "You're logged out"
     redirect_to root_path
   end
